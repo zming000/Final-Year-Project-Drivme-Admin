@@ -1,6 +1,5 @@
 package com.example.finalyeardrivmeadmin;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,8 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -57,6 +53,7 @@ public class ReferenceList extends AppCompatActivity {
         addRC = FirebaseFirestore.getInstance();
         refList = new ArrayList<>();
 
+        //initialize adapter
         rlAdapter = new AdapterReferenceList(this, refList);
         mrvReference.setAdapter(rlAdapter);
 
@@ -122,9 +119,7 @@ public class ReferenceList extends AppCompatActivity {
                                                     finishAffinity();
                                                     finish();
                                                 })
-                                                .addOnFailureListener(e -> {
-                                                    Toast.makeText(ReferenceList.this, "Fail to add Reference Code!", Toast.LENGTH_SHORT).show();
-                                                });
+                                                .addOnFailureListener(e -> Toast.makeText(ReferenceList.this, "Fail to add Reference Code!", Toast.LENGTH_SHORT).show());
                                     }
                                 }
                             });
@@ -139,6 +134,7 @@ public class ReferenceList extends AppCompatActivity {
             rcDialog.getWindow().setLayout(650, 460);
         });
 
+        //swipe down refresh
         mswipeReference.setOnRefreshListener(() -> {
             getRefDetailsFromFirestore();
             mswipeReference.setRefreshing(false);
@@ -149,7 +145,7 @@ public class ReferenceList extends AppCompatActivity {
         refDB.collection("Reference Code Details")
                 .addSnapshotListener((value, error) -> {
                     if(error != null){
-                        Toast.makeText(ReferenceList.this, "Error Loading Request!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ReferenceList.this, "Error Loading List!", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

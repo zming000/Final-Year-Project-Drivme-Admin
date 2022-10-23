@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.taufiqrahman.reviewratings.BarLabels;
 import com.taufiqrahman.reviewratings.RatingReviews;
 
-import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +26,7 @@ import java.util.Objects;
 public class DriverDetails extends AppCompatActivity {
     //declare variables
     ImageView mivGender;
-    TextView mtvName, mtvContact, mtvRating, mtvEmail, mtvAge, mtvRace, mtvDrivExp, mtvLanguages, mtvState, mtvAreas, mtvPriceDay;
+    TextView mtvName, mtvContact, mtvRating, mtvEmail, mtvAge, mtvRace, mtvDrivExp, mtvLanguages, mtvState, mtvAreas, mtvPriceDay, mtvPriceHour;
     RatingBar mrbDriver;
     RatingReviews mrrDriver;
     Button mbtnSuspend, mbtnUnsuspend;
@@ -44,6 +43,7 @@ public class DriverDetails extends AppCompatActivity {
         mtvName = findViewById(R.id.tvName);
         mtvContact = findViewById(R.id.tvContact);
         mtvPriceDay = findViewById(R.id.tvPriceDay);
+        mtvPriceHour = findViewById(R.id.tvPriceHour);
         mtvRating = findViewById(R.id.tvRating);
         mrbDriver = findViewById(R.id.rbDriver);
         mtvEmail = findViewById(R.id.tvEmail);
@@ -75,7 +75,6 @@ public class DriverDetails extends AppCompatActivity {
                         }
 
                         String gender = doc.getString("gender");
-                        float ratings = doc.getLong("rating");
                         languages = (ArrayList<String>) doc.get("languages");
                         areas = (ArrayList<String>) doc.get("familiarAreas");
 
@@ -86,11 +85,12 @@ public class DriverDetails extends AppCompatActivity {
                         else{
                             mivGender.setBackgroundResource(R.drawable.icon_female);
                         }
-                        mtvRating.setText(String.valueOf(ratings));
-                        mrbDriver.setRating(ratings);
+                        mtvRating.setText(String.valueOf(doc.getDouble("rating")));
+                        mrbDriver.setRating(Float.parseFloat(String.valueOf(doc.getDouble("rating"))));
                         mtvName.setText(doc.getString("lastName") + " " + doc.getString("firstName"));
                         mtvContact.setText(doc.getString("phoneNumber"));
                         mtvPriceDay.setText("RM" + String.valueOf(doc.getLong("priceDay").intValue()) + " / day");
+                        mtvPriceHour.setText("RM" + String.valueOf(doc.getLong("priceHour").intValue()) + " / hour");
                         mtvEmail.setText(doc.getString("email"));
                         mtvAge.setText(doc.getString("age") + " Years Old");
                         mtvRace.setText(doc.getString("race"));

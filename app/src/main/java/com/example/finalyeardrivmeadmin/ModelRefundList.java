@@ -1,6 +1,7 @@
 package com.example.finalyeardrivmeadmin;
 
 public class ModelRefundList {
+    //declare variables
     String orderID, refundStatus;
 
     public ModelRefundList() {/*empty constructor*/

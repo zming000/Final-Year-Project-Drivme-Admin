@@ -16,6 +16,9 @@ import android.widget.Toast;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,11 +27,12 @@ public class OrderDetails extends AppCompatActivity {
     //declare variables
     TextView mtvOrderID, mtvName, mtvContact, mtvDName, mtvDContact, mtvOrderStatus, mtvTripOption, mtvMeetDate, mtvMeetTime, mtvStartDate,
             mtvEndDate, mtvDuration, mtvLocality, mtvAddress, mtvCarPlate, mtvCarModel, mtvCarColour,
-            mtvCarTrans, mtvPetrolCompany, mtvPetrolType, mtvNotes, mtvPriceDay, mtvTotal;
+            mtvCarTrans, mtvPetrolCompany, mtvPetrolType, mtvNotes, mtvPriceDay, mtvTotal, mstartDate, mendDate, mpriceDay;
     ImageView mivCopy;
     Button mbtnRefund;
     String orderID;
-    FirebaseFirestore driverDetails, touristDetails, tripDetails, carDetails, getTotal, getTouristDrivpay, getDriverDrivpay, updateDrivTour, updateDrivDriver, updateRefundStatus;
+    FirebaseFirestore driverDetails, touristDetails, tripDetails, carDetails, getTotal, getTouristDrivpay,
+            getDriverDrivpay, updateDrivTour, updateDrivDriver, updateRefundStatus, updateDriverHistory, updateTouristHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +50,9 @@ public class OrderDetails extends AppCompatActivity {
         mtvMeetDate = findViewById(R.id.tvMeetDate);
         mtvMeetTime = findViewById(R.id.tvMeetTime);
         mtvStartDate = findViewById(R.id.tvStartDate);
+        mstartDate = findViewById(R.id.startDate);
         mtvEndDate = findViewById(R.id.tvEndDate);
+        mendDate = findViewById(R.id.endDate);
         mtvDuration = findViewById(R.id.tvDuration);
         mtvLocality = findViewById(R.id.tvLocality);
         mtvAddress = findViewById(R.id.tvAddress);
@@ -58,6 +64,7 @@ public class OrderDetails extends AppCompatActivity {
         mtvPetrolType = findViewById(R.id.tvPetrolType);
         mtvNotes = findViewById(R.id.tvNotes);
         mtvPriceDay = findViewById(R.id.tvPriceDay);
+        mpriceDay = findViewById(R.id.priceDay);
         mtvTotal = findViewById(R.id.tvTotal);
         mivCopy = findViewById(R.id.ivCopy);
         mbtnRefund = findViewById(R.id.btnRefund);
@@ -75,31 +82,51 @@ public class OrderDetails extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot doc = task.getResult();
                         String status = doc.getString("refundStatus");
+                        String tripOpt = doc.getString("tripOption");
 
-                        if(status.equals("Refund Needed")){
+                        if(Objects.requireNonNull(status).equals("Refund Needed")){
                             mbtnRefund.setVisibility(View.VISIBLE);
                         }
 
                         mtvOrderStatus.setText(doc.getString("orderStatus"));
                         mtvTripOption.setText("By " + doc.getString("tripOption"));
-                        mtvMeetDate.setText(doc.getString("startDate"));
-                        mtvMeetTime.setText(doc.getString("time"));
-                        mtvStartDate.setText(doc.getString("startDate"));
-                        mtvEndDate.setText(doc.getString("endDate"));
+                        mtvMeetDate.setText(doc.getString("meetDate"));
+                        mtvMeetTime.setText(doc.getString("meetTime"));
 
                         int num = Objects.requireNonNull(doc.getLong("duration")).intValue();
+                        if(Objects.requireNonNull(tripOpt).equals("Day")) {
+                            mstartDate.setText("Start Date:");
+                            mendDate.setText("End Date:");
+                            mtvStartDate.setText(doc.getString("meetDate"));
+                            mtvEndDate.setText(doc.getString("endDate"));
 
-                        if(num > 1) {
-                            mtvDuration.setText(num + " days");
+                            if(num > 1) {
+                                mtvDuration.setText(num + " days");
+                            }
+                            else{
+                                mtvDuration.setText(num + " day");
+                            }
+                            mpriceDay.setText("Price per Day (RM):");
                         }
                         else{
-                            mtvDuration.setText(num + " day");
+                            mstartDate.setText("Start Time:");
+                            mendDate.setText("End Time:");
+                            mtvStartDate.setText(doc.getString("meetTime"));
+                            mtvEndDate.setText(doc.getString("endTime"));
+
+                            if(num > 1) {
+                                mtvDuration.setText(num + " hours");
+                            }
+                            else{
+                                mtvDuration.setText(num + " hour");
+                            }
+                            mpriceDay.setText("Price per Hour (RM):");
                         }
+                        mtvPriceDay.setText(String.valueOf(Objects.requireNonNull(doc.getLong("priceDriver")).intValue()));
 
                         mtvLocality.setText(doc.getString("locality"));
                         mtvAddress.setText(doc.getString("address"));
                         mtvNotes.setText(doc.getString("note"));
-                        mtvPriceDay.setText(String.valueOf(Objects.requireNonNull(doc.getLong("priceDay")).intValue()));
                         mtvTotal.setText(String.valueOf(Objects.requireNonNull(doc.getLong("total")).intValue()));
 
                         String touristID = doc.getString("touristID");
@@ -171,6 +198,16 @@ public class OrderDetails extends AppCompatActivity {
         getDriverDrivpay = FirebaseFirestore.getInstance();
         getTouristDrivpay = FirebaseFirestore.getInstance();
         updateRefundStatus = FirebaseFirestore.getInstance();
+        updateDriverHistory = FirebaseFirestore.getInstance();
+        updateTouristHistory = FirebaseFirestore.getInstance();
+
+        DateFormat fullFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm"); //date time
+        DateFormat docID = new SimpleDateFormat("ddMMyyyyHHmmss"); //record time of button clicked
+
+        //get current date time for id
+        String transID = docID.format(Calendar.getInstance().getTime());
+        //get current date time
+        String dateTime = fullFormat.format(Calendar.getInstance().getTime());
 
         getTotal.collection("Trip Details").document(orderID).get()
                 .addOnCompleteListener(task -> {
@@ -186,6 +223,7 @@ public class OrderDetails extends AppCompatActivity {
                                 .addOnCompleteListener(task1 -> {
                                     if(task1.isSuccessful()){
                                         DocumentSnapshot doc1 = task1.getResult();
+                                        String driverToken = doc.getString("notificationToken");
                                         float driverPay = Float.parseFloat(Objects.requireNonNull(doc1.getString("drivPay")));
                                         float totalDriverPay = driverPay + driver;
 
@@ -197,7 +235,24 @@ public class OrderDetails extends AppCompatActivity {
                                                 .addOnSuccessListener(unused -> getTouristDrivpay.collection("User Accounts").document(Objects.requireNonNull(touristID)).get()
                                                         .addOnCompleteListener(task2 -> {
                                                             if(task2.isSuccessful()){
+                                                                //send notification to driver
+                                                                FCMSend.pushNotification(
+                                                                        OrderDetails.this,
+                                                                        driverToken,
+                                                                        "Cancellation Fee",
+                                                                        "Here is the cancellation fee of " + orderID);
+
+                                                                //update driver transaction history
+                                                                Map<String,Object> updateTrans = new HashMap<>();
+                                                                updateTrans.put("transType", "Cancelled " + orderID);
+                                                                updateTrans.put("transAmount", String.format("%.2f", driver));
+                                                                updateTrans.put("transDateTime", dateTime);
+
+                                                                updateDriverHistory.collection("User Accounts").document(driverID).collection("Transaction History").document(transID)
+                                                                        .set(updateTrans);
+
                                                                 DocumentSnapshot doc2 = task2.getResult();
+                                                                String touristToken = doc2.getString("notificationToken");
                                                                 float touristPay = Float.parseFloat(Objects.requireNonNull(doc2.getString("drivPay")));
                                                                 float totalTouristPay = touristPay + tourist;
 
@@ -207,6 +262,22 @@ public class OrderDetails extends AppCompatActivity {
                                                                 updateDrivTour.collection("User Accounts").document(touristID)
                                                                         .update(touristDriv)
                                                                         .addOnSuccessListener(unused1 -> {
+                                                                            //send notification to driver
+                                                                            FCMSend.pushNotification(
+                                                                                    OrderDetails.this,
+                                                                                    touristToken,
+                                                                                    "Refunded Successfully",
+                                                                                    "You have successfully refunded the money of " + orderID);
+
+                                                                            //update driver transaction history
+                                                                            Map<String,Object> updateTTrans = new HashMap<>();
+                                                                            updateTTrans.put("transType", "Refunded " + orderID);
+                                                                            updateTTrans.put("transAmount", String.format("%.2f", tourist));
+                                                                            updateTTrans.put("transDateTime", dateTime);
+
+                                                                            updateTouristHistory.collection("User Accounts").document(touristID).collection("Transaction History").document(transID)
+                                                                                    .set(updateTTrans);
+
                                                                             Map<String, Object> refund = new HashMap<>();
                                                                             refund.put("refundStatus", "Refunded");
 

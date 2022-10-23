@@ -1,6 +1,5 @@
 package com.example.finalyeardrivmeadmin;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -10,17 +9,17 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +31,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //get notification token
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task1 -> {
+                    if (!task1.isSuccessful()) {
+                        return;
+                    }
+
+                    // Get new FCM registration token
+                    String token = task1.getResult();
+                    FirebaseFirestore updateToken = FirebaseFirestore.getInstance();
+
+                    Map<String,Object> noToken = new HashMap<>();
+                    noToken.put("notificationToken", token);
+
+                    updateToken.collection("User Accounts").document("admin001")
+                            .update(noToken);
+                });
 
         mcvDriver = findViewById(R.id.cvDriver);
         mcvRefund = findViewById(R.id.cvRefund);
@@ -111,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             mbtnSearchDriver.setOnClickListener(view1 -> {
-                String driverID = metDriverID.getText().toString();
+                String driverID = Objects.requireNonNull(metDriverID.getText()).toString();
                 checkID = FirebaseFirestore.getInstance();
 
                 if(!driverID.isEmpty()) {
@@ -124,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                                         mtilDriverID.setError("ID does not exist!");
                                     }
                                     else{
-                                        int driverAcc = doc.getLong("Account Driver").intValue();
+                                        int driverAcc = Objects.requireNonNull(doc.getLong("Account Driver")).intValue();
 
                                         if(driverAcc == 1){
                                             Intent intent = new Intent(MainActivity.this, DriverDetails.class);
@@ -182,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             mbtnSearchOrder.setOnClickListener(view1 -> {
-                String orderID = metOrderID.getText().toString();
+                String orderID = Objects.requireNonNull(metOrderID.getText()).toString();
                 checkOrder = FirebaseFirestore.getInstance();
 
                 if(!orderID.isEmpty()) {

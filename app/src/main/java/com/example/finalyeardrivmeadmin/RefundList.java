@@ -38,11 +38,13 @@ public class RefundList extends AppCompatActivity {
         getOrder = FirebaseFirestore.getInstance();
         refundList = new ArrayList<>();
 
+        //initialize adapter
         flAdapter = new AdapterRefundList(this, refundList);
         mrvRefund.setAdapter(flAdapter);
 
         getRefundDetailsFromFirestore();
 
+        //swipe down refresh
         mswipeRefund.setOnRefreshListener(() -> {
             getRefundDetailsFromFirestore();
             mswipeRefund.setRefreshing(false);

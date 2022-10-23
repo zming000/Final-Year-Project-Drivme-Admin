@@ -37,11 +37,13 @@ public class SuspendList extends AppCompatActivity {
         getDriver = FirebaseFirestore.getInstance();
         suspendList = new ArrayList<>();
 
+        //initialize adapter
         dlAdapter = new AdapterDriverList(this, suspendList);
         mrvSuspend.setAdapter(dlAdapter);
 
         getSuspendDetailsFromFirestore();
 
+        //swipe down refresh
         mswipeSuspend.setOnRefreshListener(() -> {
             getSuspendDetailsFromFirestore();
             mswipeSuspend.setRefreshing(false);

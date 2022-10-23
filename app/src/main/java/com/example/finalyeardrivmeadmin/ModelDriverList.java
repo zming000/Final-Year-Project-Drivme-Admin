@@ -1,6 +1,7 @@
 package com.example.finalyeardrivmeadmin;
 
 public class ModelDriverList {
+    //declare variables
     String userID, firstName, lastName, gender;
     float rating;
 

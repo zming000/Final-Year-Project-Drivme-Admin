@@ -83,11 +83,20 @@
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="+60123456789"
                     android:textColor="@color/black"
                     android:textSize="19sp"
                     app:layout_constraintStart_toStartOf="@+id/tvContact"
                     app:layout_constraintTop_toBottomOf="@+id/tvContact" />
+
+                <TextView
+                    android:id="@+id/tvPriceHour"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="19sp"
+                    app:layout_constraintStart_toStartOf="@+id/tvPriceDay"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPriceDay" />
 
                 <TextView
                     android:id="@+id/tvRating"

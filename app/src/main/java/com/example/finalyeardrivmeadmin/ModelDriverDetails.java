@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ModelDriverDetails {
+    //declare variables
     private static ArrayList<ModelDriverDetails> detailsArrayList;
     private final String detailsOption;
 

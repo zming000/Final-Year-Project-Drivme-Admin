@@ -1,6 +1,7 @@
 package com.example.finalyeardrivmeadmin;
 
 public class ModelReferenceList {
+    //declare variables
     String driverID, driverName, refCode, status;
 
     public ModelReferenceList() {/*empty constructor*/
