@@ -240,13 +240,14 @@ public class OrderDetails extends AppCompatActivity {
                                                                         OrderDetails.this,
                                                                         driverToken,
                                                                         "Cancellation Fee",
-                                                                        "Here is the cancellation fee of " + orderID);
+                                                                        "Cancellation fee of " + orderID);
 
                                                                 //update driver transaction history
                                                                 Map<String,Object> updateTrans = new HashMap<>();
-                                                                updateTrans.put("transType", "Cancelled " + orderID);
+                                                                updateTrans.put("transType", "Cancelled Order");
                                                                 updateTrans.put("transAmount", String.format("%.2f", driver));
                                                                 updateTrans.put("transDateTime", dateTime);
+                                                                updateTrans.put("orderID", orderID);
 
                                                                 updateDriverHistory.collection("User Accounts").document(driverID).collection("Transaction History").document(transID)
                                                                         .set(updateTrans);
@@ -267,13 +268,14 @@ public class OrderDetails extends AppCompatActivity {
                                                                                     OrderDetails.this,
                                                                                     touristToken,
                                                                                     "Refunded Successfully",
-                                                                                    "You have successfully refunded the money of " + orderID);
+                                                                                    "You refunded " + orderID);
 
                                                                             //update driver transaction history
                                                                             Map<String,Object> updateTTrans = new HashMap<>();
-                                                                            updateTTrans.put("transType", "Refunded " + orderID);
+                                                                            updateTTrans.put("transType", "Refunded Order");
                                                                             updateTTrans.put("transAmount", String.format("%.2f", tourist));
                                                                             updateTTrans.put("transDateTime", dateTime);
+                                                                            updateTTrans.put("orderID", orderID);
 
                                                                             updateTouristHistory.collection("User Accounts").document(touristID).collection("Transaction History").document(transID)
                                                                                     .set(updateTTrans);

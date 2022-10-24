@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.finalyeardrivmeadmin">
+    package="com.example.finalyeardrivmeadmin" >
 
     <application
         android:allowBackup="true"
@@ -8,29 +8,30 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/app_logo_wheel"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FinalYearDrivmeAdmin">
+        android:theme="@style/Theme.FinalYearDrivmeAdmin" >
+
         <activity
             android:name=".RefundList"
-            android:exported="false" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SuspendList"
-            android:exported="false" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DriverStateList"
-            android:exported="false" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".OrderDetails"
-            android:exported="false" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DriverDetails"
-            android:exported="false" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ReferenceList"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

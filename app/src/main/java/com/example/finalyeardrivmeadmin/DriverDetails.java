@@ -89,8 +89,8 @@ public class DriverDetails extends AppCompatActivity {
                         mrbDriver.setRating(Float.parseFloat(String.valueOf(doc.getDouble("rating"))));
                         mtvName.setText(doc.getString("lastName") + " " + doc.getString("firstName"));
                         mtvContact.setText(doc.getString("phoneNumber"));
-                        mtvPriceDay.setText("RM" + String.valueOf(doc.getLong("priceDay").intValue()) + " / day");
-                        mtvPriceHour.setText("RM" + String.valueOf(doc.getLong("priceHour").intValue()) + " / hour");
+                        mtvPriceDay.setText("RM" + doc.getLong("priceDay").intValue() + " / day");
+                        mtvPriceHour.setText("RM" + doc.getLong("priceHour").intValue() + " / hour");
                         mtvEmail.setText(doc.getString("email"));
                         mtvAge.setText(doc.getString("age") + " Years Old");
                         mtvRace.setText(doc.getString("race"));
@@ -127,11 +127,11 @@ public class DriverDetails extends AppCompatActivity {
 
                         //rating and reviews
                         Pair[] colors = new Pair[]{
-                                new Pair<>(Color.parseColor("#0c96c7"), Color.parseColor("#00fe77")),
-                                new Pair<>(Color.parseColor("#7b0ab4"), Color.parseColor("#ff069c")),
-                                new Pair<>(Color.parseColor("#fe6522"), Color.parseColor("#fdd116")),
-                                new Pair<>(Color.parseColor("#104bff"), Color.parseColor("#67cef6")),
-                                new Pair<>(Color.parseColor("#ff5d9b"), Color.parseColor("#ffaa69"))
+                                new Pair<>(Color.parseColor("#0F7D63"), Color.parseColor("#9FD5B5")),
+                                new Pair<>(Color.parseColor("#0F7D63"), Color.parseColor("#9FD5B5")),
+                                new Pair<>(Color.parseColor("#0F7D63"), Color.parseColor("#9FD5B5")),
+                                new Pair<>(Color.parseColor("#0F7D63"), Color.parseColor("#9FD5B5")),
+                                new Pair<>(Color.parseColor("#0F7D63"), Color.parseColor("#9FD5B5"))
                         };
 
                         int[] raters = new int[]{

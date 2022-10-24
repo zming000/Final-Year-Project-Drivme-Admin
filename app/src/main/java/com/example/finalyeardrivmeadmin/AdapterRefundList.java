@@ -2,6 +2,7 @@ package com.example.finalyeardrivmeadmin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +35,18 @@ public class AdapterRefundList extends RecyclerView.Adapter<AdapterRefundList.Re
     @Override
     public void onBindViewHolder(@NonNull AdapterRefundList.RefundListViewHolder holder, int position) {
         ModelRefundList refundModel = refundArrayList.get(position);
+        String status = refundModel.refundStatus;
 
         holder.mtvOrderID.setText(refundModel.orderID);
         holder.mtvRefundStatus.setText(refundModel.refundStatus);
+
+        //change text color based on status
+        if(status.equals("Refund Needed")){
+            holder.mtvRefundStatus.setTextColor(Color.parseColor("#FF0000"));
+        }
+        else{
+            holder.mtvRefundStatus.setTextColor(Color.parseColor("#08F26E"));
+        }
 
         holder.mcvRefund.setOnClickListener(view -> {
             Intent intent = new Intent(refundContext, OrderDetails.class);
