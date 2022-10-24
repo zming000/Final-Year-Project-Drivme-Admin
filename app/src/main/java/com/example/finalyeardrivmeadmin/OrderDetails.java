@@ -26,7 +26,7 @@ import java.util.Objects;
 public class OrderDetails extends AppCompatActivity {
     //declare variables
     TextView mtvOrderID, mtvName, mtvContact, mtvDName, mtvDContact, mtvOrderStatus, mtvTripOption, mtvMeetDate, mtvMeetTime, mtvStartDate,
-            mtvEndDate, mtvDuration, mtvLocality, mtvAddress, mtvCarPlate, mtvCarModel, mtvCarColour,
+            mtvEndDate, mtvDuration, mtvLocality, mtvAddress, mtvCarPlate, mtvCarModel, mtvCarColour, mtvTID, mtvDID,
             mtvCarTrans, mtvPetrolCompany, mtvPetrolType, mtvNotes, mtvPriceDay, mtvTotal, mstartDate, mendDate, mpriceDay;
     ImageView mivCopy;
     Button mbtnRefund;
@@ -41,8 +41,10 @@ public class OrderDetails extends AppCompatActivity {
 
         //assign variables
         mtvOrderID = findViewById(R.id.tvOrderID);
+        mtvTID = findViewById(R.id.tvTID);
         mtvName = findViewById(R.id.tvName);
         mtvContact = findViewById(R.id.tvContact);
+        mtvDID = findViewById(R.id.tvDID);
         mtvDName = findViewById(R.id.tvDName);
         mtvDContact = findViewById(R.id.tvDContact);
         mtvOrderStatus = findViewById(R.id.tvOrderStatus);
@@ -132,7 +134,8 @@ public class OrderDetails extends AppCompatActivity {
                         String touristID = doc.getString("touristID");
                         String driverID = doc.getString("driverID");
                         String carPlate = doc.getString("carPlate");
-
+                        mtvTID.setText(touristID);
+                        mtvDID.setText(driverID);
                         /*driver details*/
                         driverDetails = FirebaseFirestore.getInstance();
                         driverDetails.collection("User Accounts").document(Objects.requireNonNull(driverID)).get()
