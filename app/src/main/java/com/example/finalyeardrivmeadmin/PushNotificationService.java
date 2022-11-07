@@ -29,20 +29,17 @@ public class PushNotificationService extends FirebaseMessagingService {
                 NotificationManager.IMPORTANCE_HIGH);
         getSystemService(NotificationManager.class).createNotificationChannel(noChannel);
 
-        Notification.Builder noBuilder = new Notification.Builder(this, CHANNEL_ID);
+        Intent reqIntent = new Intent(getApplicationContext(), RefundList.class);
+        reqIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        if(Objects.requireNonNull(noTitle).equals("Refunded Needed")) {
-            Intent reqIntent = new Intent(getApplicationContext(), RefundList.class);
-            reqIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent orderPending = PendingIntent.getActivity(getApplicationContext(), 1, reqIntent, PendingIntent.FLAG_ONE_SHOT);
 
-            PendingIntent orderPending = PendingIntent.getActivity(getApplicationContext(), 1, reqIntent, PendingIntent.FLAG_ONE_SHOT);
-
-            noBuilder.setContentTitle(noTitle);
-            noBuilder.setContentText(noText);
-            noBuilder.setSmallIcon(R.drawable.app_logo_wheel);
-            noBuilder.setAutoCancel(true);
-            noBuilder.setContentIntent(orderPending);
-        }
+        Notification.Builder noBuilder = new Notification.Builder(this, CHANNEL_ID)
+                .setContentTitle(noTitle)
+                .setContentText(noText)
+                .setSmallIcon(R.drawable.app_logo_wheel)
+                .setAutoCancel(true)
+                .setContentIntent(orderPending);
 
         NotificationManagerCompat.from(this).notify(1, noBuilder.build());
         super.onMessageReceived(message);

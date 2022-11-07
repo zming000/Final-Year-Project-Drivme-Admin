@@ -9,8 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 
 public class AdapterReferenceList extends RecyclerView.Adapter<AdapterReferenceList.RefListViewHolder> {

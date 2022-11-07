@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.finalyeardrivmeadmin" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/app_logo_wheel"
@@ -39,6 +41,10 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/app_logo_wheel" />
+
         <service
             android:name=".PushNotificationService"
             android:exported="false">
@@ -47,5 +53,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>

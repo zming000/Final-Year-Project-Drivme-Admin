@@ -216,6 +216,7 @@ public class OrderDetails extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         DocumentSnapshot doc = task.getResult();
+                        //calculation 90%/10%
                         float total = doc.getLong("total");
                         float driver = total / 10;
                         float tourist = driver * 9;
@@ -266,7 +267,7 @@ public class OrderDetails extends AppCompatActivity {
                                                                 updateDrivTour.collection("User Accounts").document(touristID)
                                                                         .update(touristDriv)
                                                                         .addOnSuccessListener(unused1 -> {
-                                                                            //send notification to driver
+                                                                            //send notification to tourist
                                                                             FCMSend.pushNotification(
                                                                                     OrderDetails.this,
                                                                                     touristToken,

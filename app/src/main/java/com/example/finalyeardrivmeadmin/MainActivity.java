@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                                         mtilDriverID.setError("ID does not exist!");
                                     }
                                     else{
-                                        int driverAcc = Objects.requireNonNull(doc.getLong("Account Driver")).intValue();
+                                        int driverAcc = Objects.requireNonNull(doc.getLong("accountDriver")).intValue();
 
                                         if(driverAcc == 1){
                                             Intent intent = new Intent(MainActivity.this, DriverDetails.class);
